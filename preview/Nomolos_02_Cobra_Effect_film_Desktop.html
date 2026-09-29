@@ -23,6 +23,9 @@
 <script src="../lib/clockwork.js"></script>
 <script src="../lib/plain.js"></script>
 <script src="../lib/goal.js"></script>
+<script src="../lib/archive.js"></script>
+<script src="../lib/bits.js"></script>
+<script src="../lib/hanoi.js"></script>
 <script src="../sequences/seq-01/timing.js"></script>
 <script src="../sequences/seq-01/film.js"></script>
 <script src="../sequences/seq-02/timing.js"></script>
@@ -47,8 +50,16 @@
 <script src="../sequences/seq-09/film.js"></script>
 <script src="../sequences/seq-10/timing.js"></script>
 <script src="../sequences/seq-10/film.js"></script>
+<script src="../sequences/seq-11/timing.js"></script>
+<script src="../sequences/seq-11/film.js"></script>
+<script src="../sequences/seq-12/timing.js"></script>
+<script src="../sequences/seq-12/film.js"></script>
+<script src="../sequences/seq-13/timing.js"></script>
+<script src="../sequences/seq-13/film.js"></script>
+<script src="../sequences/seq-14/timing.js"></script>
+<script src="../sequences/seq-14/film.js"></script>
 <script>
-const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07","seq-08","seq-08b","seq-08c","seq-09","seq-10"];
+const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07","seq-08","seq-08b","seq-08c","seq-09","seq-10","seq-11","seq-12","seq-13","seq-14"];
 for (const id of IDS) { const s = FILM.getScene(id), draw = s.draw; s.draw = (ctx, t) => { ctx.save(); draw(ctx, t); ctx.restore(); }; }
 FILM.reel(IDS);
 </script>
