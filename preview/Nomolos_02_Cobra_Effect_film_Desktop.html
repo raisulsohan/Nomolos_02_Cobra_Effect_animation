@@ -26,6 +26,7 @@
 <script src="../lib/archive.js"></script>
 <script src="../lib/bits.js"></script>
 <script src="../lib/hanoi.js"></script>
+<script src="../lib/cases.js"></script>
 <script src="../sequences/seq-01/timing.js"></script>
 <script src="../sequences/seq-01/film.js"></script>
 <script src="../sequences/seq-02/timing.js"></script>
@@ -58,8 +59,32 @@
 <script src="../sequences/seq-13/film.js"></script>
 <script src="../sequences/seq-14/timing.js"></script>
 <script src="../sequences/seq-14/film.js"></script>
+<script src="../sequences/seq-15/timing.js"></script>
+<script src="../sequences/seq-15/film.js"></script>
+<script src="../sequences/seq-16/timing.js"></script>
+<script src="../sequences/seq-16/film.js"></script>
+<script src="../sequences/seq-17/timing.js"></script>
+<script src="../sequences/seq-17/film.js"></script>
+<script src="../sequences/seq-17b/timing.js"></script>
+<script src="../sequences/seq-17b/film.js"></script>
+<script src="../sequences/seq-18/timing.js"></script>
+<script src="../sequences/seq-18/film.js"></script>
+<script src="../sequences/seq-19/timing.js"></script>
+<script src="../sequences/seq-19/film.js"></script>
+<script src="../sequences/seq-20/timing.js"></script>
+<script src="../sequences/seq-20/film.js"></script>
+<script src="../sequences/seq-21/timing.js"></script>
+<script src="../sequences/seq-21/film.js"></script>
+<script src="../sequences/seq-22/timing.js"></script>
+<script src="../sequences/seq-22/film.js"></script>
+<script src="../sequences/seq-23/timing.js"></script>
+<script src="../sequences/seq-23/film.js"></script>
+<script src="../sequences/seq-24/timing.js"></script>
+<script src="../sequences/seq-24/film.js"></script>
+<script src="../sequences/seq-25/timing.js"></script>
+<script src="../sequences/seq-25/film.js"></script>
 <script>
-const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07","seq-08","seq-08b","seq-08c","seq-09","seq-10","seq-11","seq-12","seq-13","seq-14"];
+const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07","seq-08","seq-08b","seq-08c","seq-09","seq-10","seq-11","seq-12","seq-13","seq-14","seq-15","seq-16","seq-17","seq-17b","seq-18","seq-19","seq-20","seq-21","seq-22","seq-23","seq-24","seq-25"];
 for (const id of IDS) { const s = FILM.getScene(id), draw = s.draw; s.draw = (ctx, t) => { ctx.save(); draw(ctx, t); ctx.restore(); }; }
 FILM.reel(IDS);
 </script>

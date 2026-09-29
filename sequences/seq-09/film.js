@@ -362,5 +362,5 @@
   }
 
   F.scene('seq-09', { W, H, duration: DUR, draw, grain: 'none', ready: F.fonts('NSC', 'NS'), label: C.label,
-    api: { cam, office, goalAt, beamA, panAt, CARD, WIN, poses: { official: officialPose, hunter: hunterPose } } });
+    api: { cam, office, goalAt, beamA, panAt, tailTie, CARD, WIN, DUR, poses: { official: officialPose, hunter: hunterPose } } });
 })();
