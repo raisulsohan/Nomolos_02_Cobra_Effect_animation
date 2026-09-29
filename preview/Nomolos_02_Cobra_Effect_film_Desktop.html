@@ -29,8 +29,12 @@
 <script src="../sequences/seq-04/film.js"></script>
 <script src="../sequences/seq-05/timing.js"></script>
 <script src="../sequences/seq-05/film.js"></script>
+<script src="../sequences/seq-06/timing.js"></script>
+<script src="../sequences/seq-06/film.js"></script>
+<script src="../sequences/seq-07/timing.js"></script>
+<script src="../sequences/seq-07/film.js"></script>
 <script>
-const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05"];
+const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07"];
 for (const id of IDS) { const s = FILM.getScene(id), draw = s.draw; s.draw = (ctx, t) => { ctx.save(); draw(ctx, t); ctx.restore(); }; }
 FILM.reel(IDS);
 </script>
