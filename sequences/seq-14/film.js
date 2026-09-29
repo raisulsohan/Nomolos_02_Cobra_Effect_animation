@@ -8,7 +8,7 @@
     scurry: C.s('S078').t0, health: 8.912, with: C.s('S079').t0, tails: 10.407 };
 
   const FS = 3, GRATE = 60, STOP = -40;
-  const walk = M.gait({ from: -250, to: STOP / FS, t0: .15, gait: 'stroll', until: T.streets, arms: [null, [.2, 1.7]] });
+  const walk = M.gait({ from: -250, to: STOP / FS, t0: .15, gait: 'stroll', until: T.streets, arms: [null, [.2, 1.7]], hands: [null, { pose: 'grip', thumb: 'far' }] });
   const idle = M.idle({ x: STOP / FS, seed: 4 });
 
   const Z = PORT ? .62 : .92;
@@ -49,6 +49,7 @@
   function residentPose(tp) {
     let p = tp < T.streets ? walk(tp) : idle(tp);
     if (tp >= T.streets) p = { ...p, arms: [p.arms[0], [.2, 1.7]] };
+    p.hands = [p.hands ? p.hands[0] : { pose: 'relaxed', k: .45 }, { pose: 'grip', thumb: 'far' }];
     p.head = (p.head || 0) + .16 * smooth((tp - T.streets + .3) / .4) - .1 * smooth((tp - T.alive) / .3);
     const f0 = F.env(tp, T.scurry + .5, T.scurry + .7, T.scurry + .95, T.scurry + 1.15), f1 = F.env(tp, T.scurry + 1.3, T.scurry + 1.5, T.scurry + 1.75, T.scurry + 1.95);
     if (f0 > 0 || f1 > 0) p = { ...p, feet: p.feet.map((f, i) => M.foot(f.ax ?? f.at[0], 0, (i ? f1 : f0) * 7)), hip: [p.hip[0], p.hip[1] - 2 * Math.max(f0, f1)] };
@@ -58,14 +59,47 @@
   }
   function resident(x, tp) {
     x.save(); x.scale(FS, FS);
-    const PJ = M.draw(x, P, residentPose(tp), { ...CAST.resident, dir: 1 });
-    const wr = PJ.arms[1].wr, top = [wr[0] - 4, -132];
-    x.strokeStyle = mix(P.woodDark, P.ink, .2); x.lineWidth = 1.6; x.beginPath(); x.moveTo(wr[0], wr[1] + 4); x.lineTo(top[0], top[1]); x.stroke();
-    x.fillStyle = mix(P.cream, P.card, .4); x.beginPath(); x.moveTo(top[0] - 44, top[1] + 18);
-    for (let k = 0; k <= 8; k++) { const a = Math.PI + k / 8 * Math.PI; x.lineTo(top[0] + Math.cos(a) * 44, top[1] + 18 + Math.sin(a) * 24); }
-    for (let k = 8; k >= 0; k--) x.quadraticCurveTo(top[0] - 44 + k * 11 + 5.5, top[1] + 24, top[0] - 44 + k * 11, top[1] + 18);
-    x.fill();
-    x.strokeStyle = mix(P.cream, P.ink, .25); x.lineWidth = 1; for (let k = -2; k <= 2; k++) { x.beginPath(); x.moveTo(top[0], top[1] - 6); x.lineTo(top[0] + k * 17, top[1] + 21); x.stroke(); }
+    M.draw(x, P, residentPose(tp), {
+      ...CAST.resident,
+      dir: 1,
+      prop(xx, PJ) {
+        const a1 = PJ.arms[1];
+        const fore = Math.atan2(a1.wr[0] - a1.el[0], a1.wr[1] - a1.el[1]);
+        const rot = -fore;
+        const hold = F.hands.hold({ pose: 'grip' });
+        const gx = a1.wr[0] + Math.cos(rot) * hold[0] - Math.sin(rot) * hold[1];
+        const gy = a1.wr[1] + Math.sin(rot) * hold[0] + Math.cos(rot) * hold[1];
+        const top = [gx - 4, -132];
+
+        xx.strokeStyle = mix(P.woodDark, P.ink, .2);
+        xx.lineWidth = 1.6;
+        xx.beginPath();
+        xx.moveTo(gx, gy + 5);
+        xx.lineTo(top[0], top[1]);
+        xx.stroke();
+
+        xx.fillStyle = mix(P.cream, P.card, .4);
+        xx.beginPath();
+        xx.moveTo(top[0] - 44, top[1] + 18);
+        for (let k = 0; k <= 8; k++) {
+          const a = Math.PI + k / 8 * Math.PI;
+          xx.lineTo(top[0] + Math.cos(a) * 44, top[1] + 18 + Math.sin(a) * 24);
+        }
+        for (let k = 8; k >= 0; k--) {
+          xx.quadraticCurveTo(top[0] - 44 + k * 11 + 5.5, top[1] + 24, top[0] - 44 + k * 11, top[1] + 18);
+        }
+        xx.fill();
+
+        xx.strokeStyle = mix(P.cream, P.ink, .25);
+        xx.lineWidth = 1;
+        for (let k = -2; k <= 2; k++) {
+          xx.beginPath();
+          xx.moveTo(top[0], top[1] - 6);
+          xx.lineTo(top[0] + k * 17, top[1] + 21);
+          xx.stroke();
+        }
+      }
+    });
     x.restore();
   }
 
