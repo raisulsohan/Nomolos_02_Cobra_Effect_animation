@@ -15,7 +15,7 @@
   const BOXES = [[500, T.safety, 'SAFETY'], [720, T.discovery, 'DISCOVERY'], [940, T.growth, 'GROWTH']], TAGS = ['10,000', '1,200', '3,500,000'];
   const OPEN = [T.buying - .1, T.buying + .3];
   const payAt = i => T.people + .1 + i * .42;
-  const Z = PORT ? .6 : .88;
+  const Z = PORT ? .76 : .88;
   const cam = B.cam([[0, 300, -300, Z], [T.outcome, 360, -300, Z * 1.02], [T.safety + .3, 700, -250, Z * 1.45], [T.what, 720, -250, Z * 1.5], [DUR, 640, -260, Z * 1.38]]);
 
   function shop(x) {
