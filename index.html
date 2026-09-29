@@ -66,7 +66,7 @@ kbd { font: 600 12px NS, sans-serif; border: 1px solid var(--line); border-botto
   <p class="keys">Click the picture to play or pause. <kbd>Space</kbd> play/pause · <kbd>←</kbd> <kbd>→</kbd> one frame · <kbd>Shift</kbd> + <kbd>←</kbd> <kbd>→</kbd> one second · <kbd>Home</kbd> back to the start · <kbd>F</kbd> fullscreen</p>
 </main>
 <script>
-const PROJECT = 'Nomolos_02_Cobra_Effect', LIST = [{"id":"film","label":"Whole film","d":97},{"id":"01","label":"Scene 01","d":29},{"id":"02","label":"Scene 02","d":16},{"id":"03","label":"Scene 03","d":25},{"id":"04","label":"Scene 04","d":27}];
+const PROJECT = 'Nomolos_02_Cobra_Effect', LIST = [{"id":"film","label":"Whole film","d":114},{"id":"01","label":"Scene 01","d":29},{"id":"02","label":"Scene 02","d":16},{"id":"03","label":"Scene 03","d":25},{"id":"04","label":"Scene 04","d":27},{"id":"05","label":"Scene 05","d":17}];
 const $ = id => document.getElementById(id);
 const mmss = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
 const url = (id, f) => id === 'film' ? `preview/${PROJECT}_film_${f}.html` : `preview/${PROJECT}_scene-${id}_${f}.html`;

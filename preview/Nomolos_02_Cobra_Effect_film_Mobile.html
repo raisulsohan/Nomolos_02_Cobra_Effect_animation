@@ -20,6 +20,8 @@
 <script src="../lib/citymap.js"></script>
 <script src="../lib/farm.js"></script>
 <script src="../lib/rulers.js"></script>
+<script src="../lib/clockwork.js"></script>
+<script src="../lib/plain.js"></script>
 <script src="../sequences/seq-01/timing.js"></script>
 <script src="../sequences/seq-01/film.js"></script>
 <script src="../sequences/seq-02/timing.js"></script>
@@ -36,8 +38,10 @@
 <script src="../sequences/seq-07/film.js"></script>
 <script src="../sequences/seq-08/timing.js"></script>
 <script src="../sequences/seq-08/film.js"></script>
+<script src="../sequences/seq-08b/timing.js"></script>
+<script src="../sequences/seq-08b/film.js"></script>
 <script>
-const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07","seq-08"];
+const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07","seq-08","seq-08b"];
 for (const id of IDS) { const s = FILM.getScene(id), draw = s.draw; s.draw = (ctx, t) => { ctx.save(); draw(ctx, t); ctx.restore(); }; }
 FILM.reel(IDS);
 </script>
