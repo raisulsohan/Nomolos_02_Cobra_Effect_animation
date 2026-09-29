@@ -2,37 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Nomolos_02_Cobra_Effect · Film · 4:5</title>
+<title>Nomolos_02_Cobra_Effect · Scene 02 · S013–S018</title>
 <style>html,body{margin:0;height:100%;background:#000;overflow:hidden}body{display:grid;place-items:center}canvas{max-width:100vw;max-height:100vh;display:block}</style>
 </head>
 <body>
 <canvas id="c"></canvas>
-<script>window.ROOT = '../'; window.FORMAT = '4x5';</script>
+<script>window.ROOT = '../';</script>
 <script src="../lib/core.js"></script>
 <script src="../lib/looks.js"></script>
 <script src="../lib/props.js"></script>
-<script src="../lib/rope.js"></script>
-<script src="../lib/hand.js"></script>
 <script src="../lib/cobra.js"></script>
+<script src="../lib/hand.js"></script>
 <script src="../lib/city.js"></script>
 <script src="../lib/people.js"></script>
 <script src="../lib/bounty.js"></script>
-<script src="../lib/citymap.js"></script>
+<script src="../lib/rope.js"></script>
 <script src="../lib/farm.js"></script>
-<script src="../sequences/seq-01/timing.js"></script>
-<script src="../sequences/seq-01/film.js"></script>
 <script src="../sequences/seq-02/timing.js"></script>
 <script src="../sequences/seq-02/film.js"></script>
-<script src="../sequences/seq-03/timing.js"></script>
-<script src="../sequences/seq-03/film.js"></script>
-<script src="../sequences/seq-04/timing.js"></script>
-<script src="../sequences/seq-04/film.js"></script>
 <script src="../sequences/seq-05/timing.js"></script>
 <script src="../sequences/seq-05/film.js"></script>
-<script>
-const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05"];
-for (const id of IDS) { const s = FILM.getScene(id), draw = s.draw; s.draw = (ctx, t) => { ctx.save(); draw(ctx, t); ctx.restore(); }; }
-FILM.reel(IDS);
-</script>
+<script>FILM.reel(['seq-05']);</script>
 </body>
 </html>
