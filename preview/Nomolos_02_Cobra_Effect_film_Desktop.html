@@ -22,6 +22,7 @@
 <script src="../lib/rulers.js"></script>
 <script src="../lib/clockwork.js"></script>
 <script src="../lib/plain.js"></script>
+<script src="../lib/goal.js"></script>
 <script src="../sequences/seq-01/timing.js"></script>
 <script src="../sequences/seq-01/film.js"></script>
 <script src="../sequences/seq-02/timing.js"></script>
@@ -40,8 +41,12 @@
 <script src="../sequences/seq-08/film.js"></script>
 <script src="../sequences/seq-08b/timing.js"></script>
 <script src="../sequences/seq-08b/film.js"></script>
+<script src="../sequences/seq-08c/timing.js"></script>
+<script src="../sequences/seq-08c/film.js"></script>
+<script src="../sequences/seq-09/timing.js"></script>
+<script src="../sequences/seq-09/film.js"></script>
 <script>
-const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07","seq-08","seq-08b"];
+const IDS = ["seq-01","seq-02","seq-03","seq-04","seq-05","seq-06","seq-07","seq-08","seq-08b","seq-08c","seq-09"];
 for (const id of IDS) { const s = FILM.getScene(id), draw = s.draw; s.draw = (ctx, t) => { ctx.save(); draw(ctx, t); ctx.restore(); }; }
 FILM.reel(IDS);
 </script>
