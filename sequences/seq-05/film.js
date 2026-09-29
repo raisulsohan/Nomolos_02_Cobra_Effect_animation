@@ -8,24 +8,24 @@
   const G = S2.G, R = [0, 0];
 
   const T = {
-    idea: 1.439, s14: C.s('S014').t0, why: 5.007, wild: 6.489, all: 7.268,
+    idea: 1.439, s14: C.s('S014').t0, why: 5.007, trouble: 5.674, wild: 6.489, all: 7.268,
     s15: C.s('S015').t0, breed: 8.291, s16: C.s('S016').t0, raise: 9.118, kill: 10.534,
     collect: 11.177, reward: 11.767, s17: C.s('S017').t0, farm: 13.139,
     s18: C.s('S018').t0, printed: 13.907, fangs: 14.942,
   };
 
   const BS = 2.2;
-  const YARD = { x0: 380, x1: 3060, wall: 60 };
+  const YARD = { x0: 380, x1: 3240, wall: 60 };
   const BASKET = { x: 540, s: .9 };
-  const CRATES = [1250, 1395, 1540];
-  const HOUSE = { x0: 1800, x1: 2420, top: -330, door: 1870, win: [2340, -190] };
-  const XM = 2150;
-  const PEG = [2370, 222];
-  const STACKS = [[1235, 3], [1355, 3], [1475, 2], [1595, 3], [1715, 4], [2510, 4], [2635, 3], [2760, 4], [2885, 3]];
+  const CRATES = [1880, 2010, 2140];
+  const HOUSE = { x0: 1800, x1: 2420, top: -330, door: 1870, win: [2385, -30] };
+  const XM = 2500;
+  const PEG = [2762, 60];
+  const STACKS = [[1235, 3], [1355, 3], [1475, 2], [1595, 3], [1715, 4], [2700, 4], [2825, 3], [2950, 4], [3075, 3]];
   const CAGE = { w: 112, h: 58 };
   const NOTE_STACK = 5;
   const NOTE = [STACKS[NOTE_STACK][0], G - STACKS[NOTE_STACK][1] * CAGE.h];
-  const POLES = [1655, 2572, 2822];
+  const POLES = [1655, 2762, 3012];
 
   const X0 = -330, U = v => v / BS;
   const GRIP = { pose: 'grip' }, LANT = [.42, .92];
@@ -80,19 +80,28 @@
     [T.kill - .06, { ...M.stand(0), hip: [-1.5, M.HIP + .4], lean: -.14, head: -.1, arms: [[3.0, 3.35], [.3, .5]], hands: [GRIP, REL] }],
     [T.kill + .08, { ...M.stand(0), hip: [2, M.HIP + 2.5], lean: .32, bend: .12, head: .2, arms: [[.95, 1.25], [.25, .45]], hands: [GRIP, REL] }, F.easeIn],
     [T.kill + .42, { ...M.stand(0), hip: [2, M.HIP + 2], lean: .28, bend: .1, head: .22, arms: [[.9, 1.2], [.2, .4]], hands: [GRIP, REL] }],
-    [T.collect + .15, { ...M.stand(0), arms: [[.12, .25], NEAR0], hands: [GRIP, REL] }],
+    [T.collect + .15, { ...M.stand(0), arms: [[-.06, .04], NEAR0], hands: [GRIP, REL] }],
   ], { lag: { arms: .03 } });
   const PALM_T = [T.collect - .3, T.collect - .02, T.s17 - .5, T.s17 - .1];
-  const DROPS = [T.collect + .06, T.collect + .26, T.collect + .46];
+  const DROPS = [T.collect + .12, T.collect + .27, T.collect + .42];
   const CLOSE = [T.reward - .08, T.reward + .16];
   const xmIdle = M.idle({ seed: 8, base: SH(T.collect + .15), t0: T.collect + .15 });
+  const PK = [T.s17 - .65, T.s17 - .25, T.s17 - .05, T.s17 + .15, T.s17 + .45];
+  const POCKET = { x: 3.5, top: -35, w: 11 };
   function xmPose(tp) {
     const p = { ...(tp < T.collect + .15 ? SH(tp) : xmIdle(tp)) };
     if (tp < PALM_T[0]) return p;
-    const out = smooth((tp - PALM_T[0]) / (PALM_T[1] - PALM_T[0])) * (1 - smooth((tp - PALM_T[2]) / (PALM_T[3] - PALM_T[2])));
+    const out = smooth((tp - PALM_T[0]) / (PALM_T[1] - PALM_T[0]));
     p.arms = [p.arms[0], [lerp(p.arms[1][0], 1.5, out), lerp(p.arms[1][1], 1.62, out)]];
-    p.hands = [GRIP, { pose: 'fist' }];
-    p.cupK = Math.max((1 - out) * .5, smooth((tp - CLOSE[0]) / (CLOSE[1] - CLOSE[0])));
+    p.hands = [GRIP, { pose: 'none' }];
+    p.cupK = Math.max((1 - out) * .5, smooth((tp - CLOSE[0]) / (CLOSE[1] - CLOSE[0]))) * (1 - .7 * smooth((tp - PK[2]) / .2));
+    if (tp >= PK[0]) {
+      const hx = p.hip[0] + POCKET.x, wr0 = M.joints(p).arms[1].wr, above = [hx, POCKET.top - 9], inside = [hx, POCKET.top + 1.5];
+      const k1 = smooth((tp - PK[0]) / (PK[1] - PK[0])), k2 = smooth((tp - PK[1]) / (PK[2] - PK[1])) * (1 - smooth((tp - PK[2]) / (PK[3] - PK[2])));
+      M.reach(p, 1, k2 > 0 ? [lerp(above[0], inside[0], k2), lerp(above[1], inside[1], k2)] : [lerp(wr0[0], above[0], k1), lerp(wr0[1], above[1], k1)]);
+      if (tp >= PK[3]) { const k4 = smooth((tp - PK[3]) / (PK[4] - PK[3])); p.arms = [p.arms[0], [lerp(p.arms[1][0], NEAR0[0], k4), lerp(p.arms[1][1], NEAR0[1], k4)]]; }
+      if (tp >= PK[4]) p.hands = [GRIP, REL];
+    }
     return p;
   }
   const B = FARM.breeder(P);
@@ -108,7 +117,10 @@
     const o = { ...B, ...o2 };
     const lit = o2.lantern !== false;
     o.behind = (xx, PJ) => { if (lit && !PJ.arms[0].near) lanternIn(xx, PJ, 0, px, G, BS, rootX, sw, .3 + .7 * smooth((Math.abs(PJ.arms[0].wr[0] - PJ.hip[0] * Math.cos(PJ.yaw)) - 6) / 9)); if (o2.behind) o2.behind(xx, PJ); };
-    o.prop = (xx, PJ) => { if (lit && PJ.arms[0].near) lanternIn(xx, PJ, 0, px, G, BS, rootX, sw); if (o2.prop) o2.prop(xx, PJ); };
+    o.prop = (xx, PJ) => {
+      if (Math.cos(PJ.yaw) > .8) { xx.strokeStyle = mix(o.coat, P.ink, .4); xx.lineWidth = .9; xx.lineCap = 'round'; xx.beginPath(); xx.moveTo(PJ.hip[0] + POCKET.x - POCKET.w / 2, POCKET.top + .3); xx.quadraticCurveTo(PJ.hip[0] + POCKET.x, POCKET.top + 1.4, PJ.hip[0] + POCKET.x + POCKET.w / 2, POCKET.top); xx.stroke(); xx.lineCap = 'butt'; }
+      if (lit && PJ.arms[0].near) lanternIn(xx, PJ, 0, px, G, BS, rootX, sw); if (o2.prop) o2.prop(xx, PJ);
+    };
     x.save(); x.translate(px, G); x.scale(BS, BS); const PJ = M.draw(x, P, pose, o); x.restore();
     return { ...PJ, rootX };
   }
@@ -183,7 +195,7 @@
   }
 
   const CR = { w: 124, h: 34 };
-  const HATCH = CRATES.flatMap((cx, i) => [-38, -6, 26].map((dx, j) => ({ cx, x: cx + dx + (hash(i, j, 3) - .5) * 8, t: T.raise + .02 + i * .14 + j * .09 + hash(i, j, 4) * .06, dir: hash(i, j, 5) < .5 ? -1 : 1, seed: i * 3 + j })));
+  const HATCH = CRATES.flatMap((cx, i) => [-38, -6, 26].map((dx, j) => ({ cx, x: cx + dx + (hash(i, j, 3) - .5) * 8, t: T.raise + .36 + i * .14 + j * .09 + hash(i, j, 4) * .06, dir: hash(i, j, 5) < .5 ? -1 : 1, seed: i * 3 + j })));
   function crate(x, cx, part) {
     const top = G + 8 - CR.h;
     if (part === 'back') { x.fillStyle = mix(P.wood, P.ink, .45); x.fillRect(cx - CR.w / 2, top - 10, CR.w, CR.h + 10); return; }
@@ -210,10 +222,10 @@
     CRATES.forEach(cx => crate(x, cx, 'front'));
   }
 
-  const SHADOW = { x: XM - 240, y: G - 170, s: BS * 1.85 };
+  const SHADOW = { x: XM - 460, y: G - 20, s: BS * 1.09 };
   function shadow(x, tp) {
     const lit = .12 + .22 * F.env(tp, T.kill - .7, T.kill - .35, T.collect, T.s17);
-    const pool = x.createRadialGradient(SHADOW.x + 40, -40, 0, SHADOW.x + 40, -40, 520);
+    const pool = x.createRadialGradient(SHADOW.x + 40, SHADOW.y - 120, 0, SHADOW.x + 40, SHADOW.y - 120, 520);
     pool.addColorStop(0, F.rgba(F.hex(P.glow), lit)); pool.addColorStop(1, F.rgba(F.hex(P.glow), 0));
     x.fillStyle = pool; x.fillRect(HOUSE.x0, HOUSE.top, HOUSE.x1 - HOUSE.x0, G - HOUSE.top);
     if (tp < T.kill - .5 || tp > T.collect + .15) return;
@@ -229,32 +241,37 @@
 
   const COIN_R = 2.6;
   let palmAt = null;
-  function coins(x, tp) {
-    if (!palmAt || tp < DROPS[0] - .3 || tp > PALM_T[2]) return;
-    const shut = smooth((tp - CLOSE[0]) / (CLOSE[1] - CLOSE[0]));
+  const RESTS = [[-27, -10], [-31, -11.1], [-24, -12]], COIN_TILT = .78;
+  function coins(x, tp, toW) {
+    if (tp < DROPS[0] - .3 || tp > PK[2]) return;
     DROPS.forEach((d, i) => {
       const u = tp - d; if (u < -.35) return;
-      const rest = [palmAt[0] + (i - 1) * 2.2, palmAt[1] - 1.2 - i * .9];
-      let y, tilt = .6;
-      if (u < 0) { const g = 1 - (-u / .35); y = lerp(rest[1] - 160, rest[1], g * g); tilt = .2; }
-      else { const b = Math.max(0, Math.sin(Math.PI * clamp(u / .12))) * 4 * Math.exp(-u * 6); y = rest[1] - b; }
-      if (shut > .85) return;
+      const rest = toW(...RESTS[i]);
+      let y, tilt = COIN_TILT;
+      if (u < 0) { const g = 1 - (-u / .35); y = lerp(rest[1] - 160, rest[1], g * g); tilt = .3; }
+      else { const b = Math.max(0, Math.sin(Math.PI * clamp(u / .1))) * 1.4 * Math.exp(-u * 8); y = rest[1] - b; }
       PR.coin(x, P, 'lightbox', rest[0], y, COIN_R, tilt);
     });
   }
 
   function palmHand(x, PJ, k, tp) {
+    const inPocket = tp > PK[1] - .1 && tp < PK[3] + .1;
+    if (inPocket) { const r = pocketMouth(PJ); x.save(); x.beginPath(); x.rect(-1e5, -1e5, 2e5, 2e5); x.rect(r.x0, r.y, r.w, G + 50 - r.y); x.clip('evenodd'); }
     const a = PJ.arms[1], wr = [XM + (PJ.rootX + a.wr[0]) * BS, G + a.wr[1] * BS], th = Math.atan2(a.wr[1] - a.el[1], a.wr[0] - a.el[0]), hs = M.HANDS * BS;
     const o = { pose: 'cup', k, skin: B.skin, sleeve: B.coat, cuff: null, arm: 70 };
     const hand = layer => { x.save(); x.translate(wr[0], wr[1]); x.rotate(th); x.scale(-hs, hs); F.people.hand(x, P, { ...o, layer }); x.restore(); };
     hand('back');
-    const off = [30 * hs, -12 * hs], c = Math.cos(th), s = Math.sin(th);
-    palmAt = [wr[0] + off[0] * c - off[1] * s, wr[1] + off[0] * s + off[1] * c];
-    coins(x, tp);
+    const c = Math.cos(th), s = Math.sin(th), toW = (hx, hy) => [wr[0] - hs * hx * c - hs * hy * s, wr[1] - hs * hx * s + hs * hy * c];
+    palmAt = toW(-27, -10);
+    coins(x, tp, toW);
     hand('front');
+    if (inPocket) x.restore();
   }
 
+  function pocketMouth(PJ) { const w = POCKET.w * BS; return { x0: XM + (PJ.rootX + PJ.hip[0] + POCKET.x) * BS - w / 2, y: G + POCKET.top * BS, w }; }
+
   const NW = 26, NH = 12;
+  const NOTE_S = 1.9;
   const NOTE_T = { stand: [T.printed, T.printed + .22], fold: [T.printed + .22, T.printed + .46], morph: [T.printed + .42, T.printed + .56], flare: [T.printed + .56, T.printed + .86] };
   const ph = ([a, b], tp) => smooth((tp - a) / (b - a));
   function engraving(x, w, h, dark) {
@@ -273,7 +290,7 @@
   }
   function note(x, tp) {
     const [nx, ny] = NOTE, money = PR.money('lightbox'), body = mix(money, P.ink, .3), dark = mix(money, P.ink, .6), back = mix(money, P.ink, .45), hi = mix(money, P.rim, .2);
-    x.save(); x.translate(nx, ny);
+    x.save(); x.translate(nx, ny); x.scale(NOTE_S, NOTE_S);
     const st = ph(NOTE_T.stand, tp), fo = ph(NOTE_T.fold, tp), mo = ph(NOTE_T.morph, tp);
     if (st <= 0) {
       x.fillStyle = body; x.beginPath(); x.moveTo(-NW, 0); x.lineTo(NW - 5, 0); x.lineTo(NW, -6); x.lineTo(-NW + 5, -6); x.closePath(); x.fill();
@@ -323,15 +340,42 @@
     x.restore();
   }
 
+  const WORDS = [['PRINTED', T.printed], ['MONEY', 14.33], ['WITH', 14.66], ['FANGS', T.fangs]];
+  const WALL_TEXT = { x: 2080, y: [-222, -128], size: 72 };
+  function wallWords(x, tp) {
+    if (tp < WORDS[0][1] - .02) return;
+    const ink = PR.money('lightbox'), edge = mix(ink, P.ink, .55);
+    x.save(); x.font = `900 ${WALL_TEXT.size}px NSC`; x.textBaseline = 'middle'; x.textAlign = 'left';
+    const lines = [WORDS.slice(0, 2), WORDS.slice(2)];
+    lines.forEach((ws, li) => {
+      const gap = WALL_TEXT.size * .28, widths = ws.map(([wd]) => x.measureText(wd).width), total = widths.reduce((a, b) => a + b, 0) + gap * (ws.length - 1);
+      let cx = WALL_TEXT.x - total / 2;
+      ws.forEach(([wd, t0], i) => {
+        const k = clamp((tp - t0) / .12);
+        if (k > 0) {
+          const s = lerp(1.35, 1, easeIO(k)), mx = cx + widths[i] / 2, my = WALL_TEXT.y[li];
+          x.save(); x.translate(mx, my); x.scale(s, s); x.globalAlpha = smooth(k);
+          x.fillStyle = edge; x.textAlign = 'center'; x.fillText(wd, 3, 4);
+          x.fillStyle = ink; x.fillText(wd, 0, 0);
+          x.restore();
+        }
+        cx += widths[i] + gap;
+      });
+    });
+    x.restore();
+  }
+
   function far(x, t) {
     x.fillStyle = mix(P.sheetDim, P.bgTop, .45);
-    for (let i = 0; i < 9; i++) { const bx = -1500 + i * 230 + hash(i, 3) * 60, bh = 160 + hash(i, 4) * 120, bw = 190 + hash(i, 5) * 60; x.fillRect(bx, -110 - bh, bw, bh + 700); if (i % 3 === 1) { x.beginPath(); x.ellipse(bx + bw / 2, -110 - bh, bw * .26, bw * .32, 0, Math.PI, 0); x.fill(); } }
-    x.fillStyle = mix(P.sheet2, P.bgBot, .3); x.beginPath(); x.moveTo(420, 900); x.lineTo(420, -60); x.bezierCurveTo(700, -125, 1100, -118, 1500, -96); x.lineTo(4000, -80); x.lineTo(4000, 900); x.closePath(); x.fill();
-    x.fillStyle = mix(P.sheet2, P.ink, .25); for (let k = 0; k < 60; k++) { const gx = 440 + k * 55 + hash(k, 9) * 30, gy = -100 + hash(k, 10) * 20 + (gx > 1500 ? 14 : 0); x.beginPath(); x.moveTo(gx - 6, gy + 8); x.lineTo(gx, gy - 8 - hash(k, 11) * 8); x.lineTo(gx + 6, gy + 8); x.fill(); }
+    for (let i = 0; i < 8; i++) { const bx = -1500 + i * 230 + hash(i, 3) * 60, bh = 160 + hash(i, 4) * 120, bw = 190 + hash(i, 5) * 60; x.fillRect(bx, -110 - bh, bw, bh + 700); if (i % 3 === 1) { x.beginPath(); x.ellipse(bx + bw / 2, -110 - bh, bw * .26, bw * .32, 0, Math.PI, 0); x.fill(); } }
+    x.fillStyle = mix(P.sheet2, P.bgBot, .3); x.beginPath(); x.moveTo(-2000, 900); for (let fx = -2000; fx <= 4000; fx += 20) x.lineTo(fx, fieldY(fx)); x.lineTo(4000, 900); x.closePath(); x.fill();
+    x.fillStyle = mix(P.sheet2, P.ink, .25); for (let k = 0; k < 60; k++) { const gx = 440 + k * 55 + hash(k, 9) * 30, gy = fieldY(gx) + 2 + hash(k, 10) * 5; x.beginPath(); x.moveTo(gx - 6, gy + 8); x.lineTo(gx, gy - 8 - hash(k, 11) * 8); x.lineTo(gx + 6, gy + 8); x.fill(); }
     hunter(x, t);
   }
-  const HUNT = { x: PORT ? 515 : 760, y: -108, s: 1.45, prod: T.why - .1, strike: T.why + .85 };
-  const HUNT_LAMP = [HUNT.x - 52, HUNT.y - 30];
+  function fieldY(x) { const u = (Math.min(x, 1700) - 850) / 900; return -104 + 30 * u * u; }
+  const HUNT = { x: PORT ? 515 : 760, s: 1.45, prod: T.trouble + .05, strike: T.wild + .02 };
+  HUNT.y = fieldY(HUNT.x);
+  const HUNT_LAMP = [HUNT.x - 52, fieldY(HUNT.x - 52) - 17.6 * HUNT.s];
   const HB = [HUNT.strike + .02, HUNT.strike + .5], BACK = 20;
   const hBack = M.gait({ from: 0, to: BACK, t0: HB[0], until: HB[1], gait: 'walk', style: { step: 11, lift: 3, lean: -.12, head: -.12 }, arms: [[.2, .3], [2.4, 2.7]], hands: [{ pose: 'open', k: .3 }, GRIP] });
   const prodArm = k => [.5 + .5 * k, .9 + .4 * k];
@@ -351,47 +395,63 @@
     const o = { coat: dark, trouser: dark, skin: dark, shoe: dark, head: 'turban', headColor: dark, shadow: 0, armEdge: false, prop: (xx, PJ) => stick(xx, PJ, dark, .3) };
     x.save(); x.translate(HUNT.x, HUNT.y); x.scale(HUNT.s, HUNT.s); M.draw(x, P, hp, o); x.restore();
     const rise = smooth((tp - HUNT.prod - .5) / .3), lunge = Math.sin(Math.PI * clamp((tp - HUNT.strike + .06) / .3));
-    x.save(); x.beginPath(); x.rect(HUNT.x - 200, HUNT.y - 400, 600, 408); x.clip();
-    x.translate(HUNT.x + 104 - 5 * lunge, HUNT.y + 4 + 26 * (1 - rise)); x.scale(.52, .52); x.rotate(-.2 * lunge);
-    if (rise > 0) PR.cobraRear(x, P, { rise: .3 + .7 * rise, hood: rise, sway: Math.sin(tp * 4) * .1 - .35 * lunge, view: 'front' });
+    const CX = HUNT.x + 104, CY = fieldY(CX) + 1;
+    x.save(); x.beginPath(); x.rect(HUNT.x - 200, CY - 400, 600, 402); x.clip();
+    x.translate(CX - 1.5 * lunge, CY + 26 * (1 - rise)); x.scale(.52, .52); x.rotate(-.12 * lunge);
+    if (rise > 0) PR.cobraRear(x, P, { rise: .3 + .7 * rise, hood: rise, sway: Math.sin(tp * 4) * .1 - .25 * lunge, view: 'front' });
     x.restore();
     x.fillStyle = mix(P.sheet2, P.ink, .3);
-    for (let k = 0; k < 7; k++) { const gx = HUNT.x + 84 + k * 6; x.beginPath(); x.moveTo(gx - 7, HUNT.y + 8); x.lineTo(gx + (k % 2 ? 3 : -3), HUNT.y - 16 - (k % 3) * 5); x.lineTo(gx + 7, HUNT.y + 8); x.fill(); }
+    for (let k = 0; k < 7; k++) { const gx = HUNT.x + 84 + k * 6, gy = fieldY(gx) + 3; x.beginPath(); x.moveTo(gx - 7, gy); x.lineTo(gx + (k % 2 ? 3 : -3), gy - 22 - (k % 3) * 5); x.lineTo(gx + 7, gy); x.fill(); }
     x.save(); x.translate(HUNT_LAMP[0], HUNT_LAMP[1]); x.scale(HUNT.s, HUNT.s); FARM.lantern(x, P, 1, 1); x.restore();
   }
   function farms(x) {
     for (let i = 0; i < 7; i++) {
-      const fx = 1150 + i * 420 + hash(i, 21) * 90, fw = 300 + hash(i, 22) * 80, top = -40 - hash(i, 23) * 40;
+      const fx = 1350 + i * 420 + hash(i, 21) * 90, fw = 300 + hash(i, 22) * 80, top = -40 - hash(i, 23) * 40;
       for (let k = 0; k < 4; k++) { const cx = fx + 30 + k * (fw - 60) / 3, n = 3 + ((i + k) % 3); for (let j = 0; j < n; j++) { x.fillStyle = mix(P.wood, P.ink, .1); x.fillRect(cx - 30, top + 100 - (j + 1) * 34, 60, 32); x.fillStyle = mix(P.wood, P.cream, .25); for (let b = 0; b < 6; b++) x.fillRect(cx - 27 + b * 11, top + 102 - (j + 1) * 34, 2.5, 28); } }
       x.fillStyle = mix(P.wall, P.ink, .2); x.fillRect(fx - 10, top + 60, fw + 20, 700);
     }
   }
-  const FARM_LAMPS = Array.from({ length: 7 }, (_, i) => [1150 + i * 420 + hash(i, 21) * 90 + 150, -40 - hash(i, 23) * 40 - 30]);
+  const FARM_LAMPS = Array.from({ length: 7 }, (_, i) => [1350 + i * 420 + hash(i, 21) * 90 + 150, -40 - hash(i, 23) * 40 - 30]);
 
   const K = (t, x, y, z, x4, y4, z4) => [t, PORT ? [x4 ?? x, y4 ?? y, z4 ?? z * .8] : [x, y, z]];
   const PALM = [XM + 78, G - 156];
+  const TRACK = [8.5, 9.6];
+  const SHOT = PORT ? [1990, 70, 1.9] : [2010, 80, 2.1];
   const KEYS = [
     K(0, 40, 110, 1.75, 40, 95, 1.55),
     K(T.s14 + .1, 50, 112, 1.78, 50, 97, 1.58),
     K(4.75, 440, 150, 1.5, 460, 120, 1.3),
-    K(T.all - .1, 450, 128, 1.5, 470, 100, 1.3),
-    K(8.35, 530, 240, 2.1, 530, 220, 1.7),
-    K(8.72, 533, 242, 2.12, 533, 222, 1.72),
-    K(9.45, 1395, 282, 3.5, 1395, 282, 2.7),
-    K(T.kill - .45, 1400, 280, 3.55, 1400, 280, 2.75),
-    K(T.kill - .15, 1965, -150, 2.0, 1925, -200, 2.2),
-    K(T.collect - .28, 1972, -150, 2.02, 1930, -200, 2.22),
-    K(T.collect + .05, PALM[0] + 25, PALM[1], 14, PALM[0] + 18, PALM[1], 11),
-    K(T.s17 - .35, PALM[0] + 25, PALM[1] - 1, 14.6, PALM[0] + 18, PALM[1] - 1, 11.4),
-    K(T.farm + .08, 1900, -60, .95, 1950, -280, .78),
-    K(T.s18 - .45, 1900, -62, .958, 1950, -282, .786),
-    K(T.fangs - .7, NOTE[0], NOTE[1] - 31, 10.5, NOTE[0], NOTE[1] - 33, 8.4),
-    K(DUR, NOTE[0], NOTE[1] - 32, 11.1, NOTE[0], NOTE[1] - 34, 8.9),
+    K(T.breed - .02, 530, 240, 2.1, 530, 220, 1.7),
+    K(TRACK[0], 533, 242, 2.12, 533, 222, 1.72),
+    K(TRACK[1], SHOT[0], SHOT[1], SHOT[2], SHOT[0], SHOT[1], SHOT[2]),
+    K(10.72, SHOT[0] + 20, SHOT[1] - 6, SHOT[2] * 1.07, SHOT[0] + 20, SHOT[1] - 6, SHOT[2] * 1.07),
+    K(11.38, PALM[0] + 40, PALM[1] + 6, 10, PALM[0] + 30, PALM[1] + 6, 8),
+    K(12.0, PALM[0] + 40, PALM[1] + 5, 10.3, PALM[0] + 30, PALM[1] + 5, 8.2),
+    K(13.35, 1980, -60, .95, 2250, -70, 1.0),
+    K(DUR, 1980, -62, .975, 2250, -72, 1.025),
   ];
-  function cam(t) {
+  function keyedCam(t) {
     const xy = F.keyed(t, KEYS.map(([k, v]) => [k, [v[0], v[1]]])), z = F.keyed(t, KEYS.map(([k, v]) => [k, v[2]]), true);
-    const u = clamp((t - 8.72) / (9.45 - 8.72)), dip = 1 - .5 * Math.sin(Math.PI * u);
+    const u = clamp((t - TRACK[0]) / (TRACK[1] - TRACK[0])), dip = 1 - .62 * Math.sin(Math.PI * u);
     return { x: xy[0], y: xy[1], z: z * dip };
+  }
+  const ZIN = [T.why - .4, T.trouble + .05], ZOUT = [T.all + .03, T.breed - .02], HP = .5, HUNT_Z = PORT ? 9.5 : 10;
+  const HUNT_AT = [HUNT.x + 40, HUNT.y - 58];
+  const onScreen = (c, p, X, Y) => { const s = Math.pow(c.z, p); return [W / 2 + s * (X - p * c.x), H / 2 + s * (Y - p * c.y)]; };
+  const solveCam = (p, X, Y, sx, sy, z) => { const s = Math.pow(z, p); return { x: (X - (sx - W / 2) / s) / p, y: (Y - (sy - H / 2) / s) / p, z }; };
+  const ON_PALM = [[10.72, 11.38], [12.0, 13.35]];
+  function cam(t) {
+    for (const [a, b] of ON_PALM) if (t > a && t < b) {
+      const A = keyedCam(a), Bc = keyedCam(b), sa = onScreen(A, 1, ...PALM), sb = onScreen(Bc, 1, ...PALM), u = easeIO((t - a) / (b - a));
+      return solveCam(1, ...PALM, lerp(sa[0], sb[0], u), lerp(sa[1], sb[1], u), A.z * Math.pow(Bc.z / A.z, u));
+    }
+    if (t <= ZIN[0] || t >= ZOUT[1]) return keyedCam(t);
+    const mid = [W / 2, H / 2];
+    let u, za, zb, sa, sb;
+    if (t < ZIN[1]) { u = easeIO((t - ZIN[0]) / (ZIN[1] - ZIN[0])); za = keyedCam(ZIN[0]).z; zb = HUNT_Z; sa = onScreen(keyedCam(ZIN[0]), HP, ...HUNT_AT); sb = mid; }
+    else if (t < ZOUT[0]) { u = (t - ZIN[1]) / (ZOUT[0] - ZIN[1]); za = HUNT_Z; zb = HUNT_Z * 1.08; sa = sb = mid; }
+    else { u = easeIO((t - ZOUT[0]) / (ZOUT[1] - ZOUT[0])); za = HUNT_Z * 1.08; zb = keyedCam(ZOUT[1]).z; sa = mid; sb = onScreen(keyedCam(ZOUT[1]), HP, ...HUNT_AT); }
+    return solveCam(HP, ...HUNT_AT, lerp(sa[0], sb[0], u), lerp(sa[1], sb[1], u), za * Math.pow(zb / za, u));
   }
   const GATE_X = 400;
   function gateLeaf(x) {
@@ -415,11 +475,11 @@
       lane(x); yardWall(x); house(x); shadow(x, tp); stacks(x); gateLeaf(x);
       eggBasket(x, tp);
       crates(x, tp);
-      note(x, tp);
+      note(x, tp); wallWords(x, tp);
       if (tp < 9.4) breeder(x, breederPose(tp), X0, breederPose(tp - 1 / M.RATE));
       else if (tp >= T.kill - .9) {
         const xp = xmPose(tp), PJ = breeder(x, xp, XM, null, { lantern: false, behind: (xx, PJ) => stick(xx, PJ, mix(P.wood, P.cream, .1), -.5, 0) });
-        if (tp >= PALM_T[0]) palmHand(x, PJ, xp.cupK, tp);
+        if (tp >= PALM_T[0] && tp < PK[4]) palmHand(x, PJ, xp.cupK, tp);
       }
       gatepost(x);
     });
@@ -430,7 +490,9 @@
     FARM.lampGlow(ctx, PEG[0] + 14, PEG[1] - 26 + FARM.GLASS[1] * BS, 1);
     PR.glow(ctx, HOUSE.win[0], HOUSE.win[1], 90, P.window, .3, 'lightbox');
     const eg = 1 - lidK(tp); if (eg > 0) PR.glow(ctx, BASKET.x, basketTop - 6, 60, P.lampGlass, .45 * eg, 'lightbox');
-    const ng = smooth((tp - T.printed) / .4); if (ng > 0) PR.glow(ctx, NOTE[0], NOTE[1] - 30, 70, PR.money('lightbox'), .12 * ng, 'lightbox');
+    const warm = palmAt ? 1 - smooth((tp - PK[0]) / .3) : 0;
+    if (warm > 0) PR.glow(ctx, palmAt[0] + 8, palmAt[1] - 4, 34, P.glow, .22 * warm, 'lightbox');
+    const ng = smooth((tp - T.printed) / .4); if (ng > 0) PR.glow(ctx, NOTE[0], NOTE[1] - 30 * NOTE_S, 70 * NOTE_S, PR.money('lightbox'), .12 * ng, 'lightbox');
     ctx.restore();
     L.grade(ctx, t);
   }
