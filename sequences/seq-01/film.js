@@ -116,13 +116,13 @@
     x.restore();
   }
   function family(x, t) {
-    const tp = L.pose(t), fear = smooth((tp - (T.constant - .5)) / .5), [jx, jy] = tremble(tp, 31, 1.2 * fear), [bx, by] = tremble(tp, 32, 1.5 * fear);
+    const tp = L.pose(t), fear = smooth((tp - (T.constant - 1.0)) / .6), [jx, jy] = tremble(tp, 31, 1.2 * fear), [bx, by] = tremble(tp, 32, 1.5 * fear);
     const fr = lerp(.2, .9, fear), fo = lerp(.5, 2.1, fear), out = lerp(.12, .3, fear);
     const boy = M.idle({ seed: 31, base: { ...M.stand(0), yaw: Math.PI / 2, head: -.06 * fear, arms: [[fr, fo, out], [fr, fo, out]], hands: [{ pose: 'open', k: .3 * fear }, { pose: 'open', k: .3 * fear }] } })(tp);
     x.save(); x.translate(FAMILY - 18 + bx, G - 2 + by); x.scale(1.45, 1.45);
     M.draw(x, P, boy, { coat: tone('#4d6b58', P.cream, .2), trouser: CREAM, skin: SK, head: 'bare', shadow: .15 });
     x.restore();
-    const man = M.idle({ seed: 32, base: { ...M.stand(0), yaw: Math.PI / 2, head: .04 * fear, arms: [[.1, .22], [lerp(.15, .25, fear), lerp(.25, .5, fear), lerp(.15, .55, fear)]], hands: [{ pose: 'relaxed', k: .4 }, { pose: 'open', k: .25 }] } })(tp);
+    const man = M.idle({ seed: 32, base: { ...M.stand(0), yaw: Math.PI / 2, head: .04 * fear, arms: [[.1, .22], [lerp(.15, .12, fear), lerp(.25, .35, fear), lerp(.15, .9, fear)]], hands: [{ pose: 'relaxed', k: .4 }, { pose: 'open', k: .35 }] } })(tp);
     x.save(); x.translate(FAMILY + 20 + jx, G - 4 + jy); x.scale(2.25, 2.25);
     M.draw(x, P, man, { coat: CREAM, trouser: CREAM, skin: SK, head: 'turban', headColor: CREAM, beard: tone(P.cream, P.rim, .5), shadow: .15 });
     x.restore();

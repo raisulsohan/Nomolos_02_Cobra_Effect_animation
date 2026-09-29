@@ -66,16 +66,17 @@
     return [p[0], p[1] - (inkAt(tp) >= 1 || inkAt(tp) <= 0 ? .8 : 0)];
   }
   const POT_AT = [40, 30], BOX_AT = [27, 34], COIN_AT = [41, 9], LAMP_AT = [64, 26];
-  const POT = p3(POT_AT[0], POT_AT[1], TOP + 3.6), BOX = p3(BOX_AT[0], BOX_AT[1], TOP + 4), COINS = p3(COIN_AT[0], COIN_AT[1], TOP), REST = p3(30, 6, TOP + 1);
+  const POT = p3(POT_AT[0], POT_AT[1], TOP + 3.6), BOX = p3(BOX_AT[0], BOX_AT[1], TOP + 4), COINS = p3(COIN_AT[0], COIN_AT[1], TOP), REST = p3(30, 6, TOP + 7);
   const GRIP = [-6.6, -5.6];
   function nibPath(tp) {
     const n = nibAt(Math.min(tp, T.s5)), k = easeIO(clamp((tp - T.s5) / .16));
     return [lerp(n[0], POT[0], k), lerp(n[1], POT[1] - .5, k)];
   }
+  const POCKET = [MAN_X + 7, -26], T_PK = T.s5 + .34, T_PO = T_PK + .24, T_COIN = T.money + .27;
   function nearWrist(tp) {
-    const n = nibAt(Math.min(tp, T.s5)), a = T.s5, b = a + .16, c = a + .3, d = T.money, e = T.money + .3;
+    const n = nibAt(Math.min(tp, T.s5)), a = T.s5, b = a + .16;
     if (tp <= a) return [n[0] + GRIP[0], n[1] + GRIP[1]];
-    return keyed(tp, [[a, [n[0] + GRIP[0], n[1] + GRIP[1]]], [b, [POT[0] - 6, POT[1] - 1.5]], [c, [BOX[0] - 3, BOX[1] - 4]], [d, [COINS[0] - 4, COINS[1] - 5]], [e, REST]]);
+    return keyed(tp, [[a, [n[0] + GRIP[0], n[1] + GRIP[1]]], [b, [POT[0] - 6, POT[1] - 1.5]], [T_PK - .12, [POCKET[0], POCKET[1] - 12]], [T_PK, POCKET], [T_PK + .12, [POCKET[0] + .5, POCKET[1] + 1]], [T_PO, [POCKET[0] + 1, POCKET[1] - 15]], [T_PO + .08, [POCKET[0] + 6, POCKET[1] - 19]], [T_COIN, [COINS[0] - 4, COINS[1] - 8]], [T_COIN + .3, REST]]);
   }
   function cylinder(x, X, Z, r, hh, side, top) {
     const s = sOf(Z), b = p3(X, Z, TOP), t = p3(X, Z, TOP + hh), rx = r * s, ry = r * s * .38;
@@ -110,15 +111,24 @@
     x.fillStyle = cw; x.fillRect(-11, -26, 21, 3); x.fillRect(-10, -26, 2.4, 26); x.fillRect(6.5, -26, 2.4, 26);
     x.save(); x.translate(-10, -26); x.rotate(-.1); x.fillRect(-2.6, -34, 3, 34); x.fillRect(-2.6, -34, 7, 3); x.restore();
     x.restore();
-    const nw = nearWrist(tp), holdingCoins = tp > T.s5 + .3 && tp < T.money, penInHand = tp < T.s5 + .16;
+    const nw = nearWrist(tp), holdingCoins = tp > T_PK + .1 && tp < T_COIN, penInHand = tp < T.s5 + .16, inPocket = tp > T_PK - .04 && tp < T_PO - .1;
     const drawMan = () => {
       const p = M.idle({ seed: 7, base: { ...M.seatedPose(20 + MAN_X, 22), lean: .16, bend: .05, head: .12 } })(tp);
-      M.reach(p, 0, p3(14, 22, TOP + .5)); p.hands = [{ pose: 'rest', k: .35 }, null];
+      M.reach(p, 0, p3(14, 22, TOP + 3.5)); p.hands = [{ pose: 'rest', k: .35 }, null];
       if (penInHand) M.reachTool(p, 1, nibPath(tp), { pose: 'write', k: inkAt(tp) > 0 && inkAt(tp) < 1 ? .5 + .5 * Math.sin(tp * 38) : .3, pen: mix(P.ink, P.wood, .4) });
-      else { M.reach(p, 1, nw); p.hands[1] = holdingCoins ? { pose: 'fist' } : { pose: 'relaxed', k: .4 }; }
+      else { M.reach(p, 1, nw); p.hands[1] = holdingCoins ? { pose: 'pinch', k: 1 } : { pose: 'relaxed', k: .4 }; }
       M.draw(x, P, p, { coat: SUIT, trouser: mix(SUIT, P.ink, .12), skin: SKIN_O, head: 'bare', hair: HAIR, moustache: HAIR, shoe: mix(P.wood, P.ink, .5), shadow: 0,
+        prop: (xx, PJ) => {
+          if (!holdingCoins || inPocket) return;
+          const a = PJ.arms[1], fore = Math.atan2(a.wr[0] - a.el[0], a.wr[1] - a.el[1]), h = F.hands.hold({ pose: 'pinch' });
+          xx.save(); xx.translate(a.wr[0], a.wr[1]); xx.rotate(-fore); xx.translate(h[0], h[1]); xx.rotate(.5);
+          const gold = PR.money('flat'), edge = mix(gold, P.ink, .35);
+          for (let i = 2; i >= 0; i--) { xx.fillStyle = i ? edge : gold; xx.beginPath(); xx.ellipse(-i * .55, i * .4, 2.2, 1.35, 0, 0, TAU); xx.fill(); }
+          xx.restore();
+        },
         over: xx => {
-          if (holdingCoins) for (let i = 0; i < 5; i++) { xx.fillStyle = PR.money('flat'); xx.beginPath(); xx.ellipse(nw[0] + 4, nw[1] + 4.2 - i * .45, 2.1, .8, 0, 0, TAU); xx.fill(); }
+          xx.fillStyle = SUIT; xx.fillRect(POCKET[0] - 3, POCKET[1] - 1.5, 10, 9);
+          xx.strokeStyle = mix(SUIT, P.ink, .3); xx.lineWidth = .5; xx.beginPath(); xx.moveTo(POCKET[0] - 3, POCKET[1] - 1.5); xx.lineTo(POCKET[0] + 7, POCKET[1] - 1.5); xx.stroke();
         } });
     };
     drawMan();
@@ -138,7 +148,7 @@
     cylinder(x, ...POT_AT, 2.2, 3.6, P.ink, mix(P.ink, P.sheet, .35));
     if (!penInHand) { x.strokeStyle = mix(P.ink, P.wood, .4); x.lineWidth = .8; x.lineCap = 'round'; x.beginPath(); x.moveTo(POT[0], POT[1] + .5); x.lineTo(POT[0] - 3.2, POT[1] - 9); x.stroke(); x.lineCap = 'butt'; }
     { const b = cylinder(x, ...LAMP_AT, 1.8, 3.5, mix(P.amberDark, P.wood, .3), mix(P.amberDark, P.cream, .2)); x.fillStyle = P.lampGlass; x.beginPath(); x.ellipse(b[0], b[1] - 3.2, 2.2, 3, 0, 0, TAU); x.fill(); }
-    if (tp >= T.money) cylinder(x, COIN_AT[0], COIN_AT[1], 2.1, 2.3, mix(PR.money('flat'), P.ink, .3), PR.money('flat'));
+    if (tp >= T_COIN) cylinder(x, COIN_AT[0], COIN_AT[1], 2.1, 2.3, mix(PR.money('flat'), P.ink, .3), PR.money('flat'));
     x.save(); x.beginPath(); x.rect(-400, -300, 800, 300 - TOP); x.clip(); drawMan(); x.restore();
     x.fillStyle = wood; quad(x, [p3(10, 0, TOP), p3(84, 0, TOP), p3(84, 0, TOP - 3), p3(10, 0, TOP - 3)]); x.fill();
     x.fillStyle = woodD; x.fillRect(10.2, -(TOP - 3), 2.5, TOP - 3); x.fillRect(58, -(TOP - 3), 26, TOP - 3);
