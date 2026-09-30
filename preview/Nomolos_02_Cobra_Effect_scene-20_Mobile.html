@@ -19,12 +19,16 @@
 <script src="../lib/rulers.js"></script>
 <script src="../lib/bits.js"></script>
 <script src="../lib/cases.js"></script>
+<script src="../lib/captions.js"></script>
 <script src="../sequences/seq-28/timing.js"></script>
 <script src="../sequences/seq-28/film.js"></script>
 <script src="../sequences/seq-29/timing.js"></script>
 <script src="../sequences/seq-29/film.js"></script>
 <script src="../sequences/seq-30/timing.js"></script>
 <script src="../sequences/seq-30/film.js"></script>
-<script>FILM.reel(['seq-28', 'seq-29', 'seq-30']);</script>
+<script src="./Nomolos_02_Cobra_Effect_SceneSubs.js"></script>
+<script>const { W, H, id } = FILM.format(), SUBS = ((window.SCENE_SUBS || {})['20'] || {})[id] || [];
+FILM.reel(['seq-28', 'seq-29', 'seq-30'], { over: FILM.styledSubs(SUBS, { W, H, style: 'stampSpray' }), ready: FILM.fonts('NSC', 'NS') });
+addEventListener('keydown', e => { if (e.key.toLowerCase() === 'c') { window.SUBS_OFF = !window.SUBS_OFF; const sc = document.getElementById('sc'); if (sc) __film.seek(+sc.value); } });   // C: subtitles on / off</script>
 </body>
 </html>
