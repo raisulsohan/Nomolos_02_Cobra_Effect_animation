@@ -23,6 +23,7 @@
 <script src="../lib/clockwork.js"></script>
 <script src="../lib/plain.js"></script>
 <script src="../lib/goal.js"></script>
+<script src="../lib/captions.js"></script>
 <script src="../sequences/seq-08/timing.js"></script>
 <script src="../sequences/seq-08/film.js"></script>
 <script src="../sequences/seq-08b/timing.js"></script>
@@ -33,6 +34,9 @@
 <script src="../sequences/seq-08c/film.js"></script>
 <script src="../sequences/seq-09/timing.js"></script>
 <script src="../sequences/seq-09/film.js"></script>
-<script>FILM.reel(['seq-08c', 'seq-09']);</script>
+<script src="./Nomolos_02_Cobra_Effect_SceneSubs.js"></script>
+<script>const { W, H, id } = FILM.format(), SUBS = ((window.SCENE_SUBS || {})['06'] || {})[id] || [];
+FILM.reel(['seq-08c', 'seq-09'], { over: FILM.styledSubs(SUBS, { W, H, style: 'stampSpray' }), ready: FILM.fonts('NSC', 'NS') });
+addEventListener('keydown', e => { if (e.key.toLowerCase() === 'c') { window.SUBS_OFF = !window.SUBS_OFF; const sc = document.getElementById('sc'); if (sc) __film.seek(+sc.value); } });   // C: subtitles on / off</script>
 </body>
 </html>
