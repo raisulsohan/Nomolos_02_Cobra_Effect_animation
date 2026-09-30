@@ -21,12 +21,16 @@
 <script src="../lib/farm.js"></script>
 <script src="../lib/rulers.js"></script>
 <script src="../lib/plain.js"></script>
+<script src="../lib/captions.js"></script>
 <script src="../sequences/seq-04/timing.js"></script>
 <script src="../sequences/seq-04/film.js"></script>
 <script src="../sequences/seq-07/timing.js"></script>
 <script src="../sequences/seq-07/film.js"></script>
 <script src="../sequences/seq-10/timing.js"></script>
 <script src="../sequences/seq-10/film.js"></script>
-<script>FILM.reel(['seq-10']);</script>
+<script src="./Nomolos_02_Cobra_Effect_SceneSubs.js"></script>
+<script>const { W, H, id } = FILM.format(), SUBS = ((window.SCENE_SUBS || {})['07'] || {})[id] || [];
+FILM.reel(['seq-10'], { over: FILM.styledSubs(SUBS, { W, H, style: 'stampSpray' }), ready: FILM.fonts('NSC', 'NS') });
+addEventListener('keydown', e => { if (e.key.toLowerCase() === 'c') { window.SUBS_OFF = !window.SUBS_OFF; const sc = document.getElementById('sc'); if (sc) __film.seek(+sc.value); } });   // C: subtitles on / off</script>
 </body>
 </html>
