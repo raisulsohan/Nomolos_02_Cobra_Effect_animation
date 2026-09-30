@@ -61,6 +61,7 @@
       for (let i = 0; i < N; i++) ticket(x, i, t);
       for (let i = 0; i < N; i++) crawler(x, i, t);
       stamp(x, t);
+      if (F.keepClear) F.keepClear(x, -150, BY - 160, 150, BY - 64);
       x.fillStyle = mix(P.ink, P.sheet2, .3); x.fillRect(-150, BY - 160, 300, 96);
       x.fillStyle = P.amber; x.font = '900 70px NSC'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(done * 10), 0, BY - 110);
     }, { flatShadow: [10, 14, 12, .4] });
