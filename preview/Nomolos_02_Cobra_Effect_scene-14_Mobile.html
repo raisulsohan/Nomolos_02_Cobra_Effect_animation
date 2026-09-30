@@ -19,10 +19,14 @@
 <script src="../lib/rulers.js"></script>
 <script src="../lib/bits.js"></script>
 <script src="../lib/cases.js"></script>
+<script src="../lib/captions.js"></script>
 <script src="../sequences/seq-18/timing.js"></script>
 <script src="../sequences/seq-18/film.js"></script>
 <script src="../sequences/seq-19/timing.js"></script>
 <script src="../sequences/seq-19/film.js"></script>
-<script>FILM.reel(['seq-18', 'seq-19']);</script>
+<script src="./Nomolos_02_Cobra_Effect_SceneSubs.js"></script>
+<script>const { W, H, id } = FILM.format(), SUBS = ((window.SCENE_SUBS || {})['14'] || {})[id] || [];
+FILM.reel(['seq-18', 'seq-19'], { over: FILM.styledSubs(SUBS, { W, H, style: 'stampSpray' }), ready: FILM.fonts('NSC', 'NS') });
+addEventListener('keydown', e => { if (e.key.toLowerCase() === 'c') { window.SUBS_OFF = !window.SUBS_OFF; const sc = document.getElementById('sc'); if (sc) __film.seek(+sc.value); } });   // C: subtitles on / off</script>
 </body>
 </html>
