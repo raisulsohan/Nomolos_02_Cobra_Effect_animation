@@ -15,9 +15,6 @@
 <script src="../sequences/seq-16/film.js"></script>
 <script src="../sequences/seq-17/timing.js"></script>
 <script src="../sequences/seq-17/film.js"></script>
-<script src="./Nomolos_02_Cobra_Effect_SceneSubs.js"></script>
-<script>const { W, H, id } = FILM.format(), SUBS = ((window.SCENE_SUBS || {})['12'] || {})[id] || [];
-FILM.reel(['seq-15', 'seq-16', 'seq-17'], { over: FILM.styledSubs(SUBS, { W, H, style: 'stampSpray' }), ready: FILM.fonts('NSC', 'NS') });
-addEventListener('keydown', e => { if (e.key.toLowerCase() === 'c') { window.SUBS_OFF = !window.SUBS_OFF; const sc = document.getElementById('sc'); if (sc) __film.seek(+sc.value); } });   // C: subtitles on / off</script>
+<script>FILM.reel(['seq-15', 'seq-16', 'seq-17']);</script>
 </body>
 </html>
