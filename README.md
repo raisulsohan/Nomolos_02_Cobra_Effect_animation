@@ -12,26 +12,47 @@
 <p align="center">Click a clip to open its scene.</p>
 
 <p align="center">
-  <strong>An animated documentary film created, written, directed, and animated by <a href="https://raisulsohan.com">Raisul Sohan</a></strong>
+  <strong>An animated documentary film conceived, illustrated, animated in Adobe After Effects, and sound-composed by <a href="https://raisulsohan.com">Raisul Sohan</a></strong>
 </p>
 
-The animation of *The Cobra Effect: How a Bounty on Snakes Bred More Snakes*, the second Nomolos documentary, conceived, written, and animated by **[Raisul Sohan](https://raisulsohan.com)**. Every frame is mathematically composed and drawn in JavaScript on an HTML5 canvas using his own procedural drawing code, and the film itself uses zero video or image files. The clips above are recordings of the pages. Each frame is a pure function of time, so any moment can be drawn on its own.
+---
 
-The pages play silently.
+## Production & Craft
+
+*The Cobra Effect: How a Bounty on Snakes Bred More Snakes* is the second animated documentary in the **Nomolos** series, conceived, written, illustrated, animated, and sound-designed entirely by **[Raisul Sohan](https://raisulsohan.com)**. Spanning 23 complete scenes and 8 minutes 49 seconds, the film unrolls the fascinating historical and behavioral psychology of perverse incentives.
+
+### 1. Adobe After Effects Animation & Compositing
+The entire film was animated and composited inside **Adobe After Effects**. Across all 23 scenes, complex multiplane spatial scenes were choreographed using virtual 3D camera rigs, graph editor velocity easing, and bespoke character pacing. No pre-made third-party animation templates were used—every transition and sequence is handcrafted.
+
+### 2. Handcrafted Vector Illustrations
+Every single visual asset was illustrated from scratch: the bustling bazaar streets of colonial Delhi, British administrative registry offices, shadowy snake breeding pens, Hanoi sewer hunts, and the imperial court of ancient China. Each composition was designed in modular, layered vector parts to allow multi-dimensional animation rigging.
+
+### 3. Special 3D Parallax Vibe & Spatial Depth
+By separating scenes into dozens of depth planes in After Effects 3D space, the film delivers a captivating **parallax effect**. As the virtual camera dollies, cranes, and pans, foreground silhouettes drift past at realistic optical speeds while midground focal subjects and expansive backgrounds shift with genuine depth of field and perspective shifts.
+
+### 4. Atmospheric Signature Glow & Volumetric Lighting
+Dramatic chiaroscuro contrasts and signature glows (Deep Glow) accentuate pivotal narrative moments—from the glowing eyes and hood of the rearing cobra population graph to sun-dappled Indian streetscapes and moonlit Hanoi alleys. Layered light falloffs, lens blooms, and stylized film grain elevate the documentary feel.
+
+### 5. Curated Sound Design & Original Audio Scoring
+Created with zero budget for commercial production libraries, the complete soundscape was curated and constructed from free and public domain audio archives. Raisul Sohan discovered, cleaned, edited, and layered hundreds of sound effects (**SFX**)—reptilian hisses, clattering metal cages, scurrying rats, coin drops, paper stamps—and composed evocative background music (**BGM / Underscores**) synchronized frame-by-frame with each visual cut.
 
 > **Note:** All 23 scenes of the animated documentary (8:49) are complete and final.
 
+---
+
 ## Watch
 
-**Online: https://raisulsohan.github.io/Nomolos_02_Cobra_Effect_animation/**. Play the whole film or any completed scene, in 16:9 or 4:5.
+**Online: https://raisulsohan.github.io/Nomolos_02_Cobra_Effect_animation/**. Play the whole film or any completed scene, in 16:9 widescreen or 4:5 mobile.
 
-Offline, open `index.html` or any page in a browser. No build step and no server are needed.
+Offline, open `index.html` or any scene in a browser. No server is needed.
 
 - `preview/` holds the whole film (`Nomolos_02_Cobra_Effect_film_Desktop.html`, `Nomolos_02_Cobra_Effect_film_Mobile.html`, 8:49) and the film scene by scene:
   `Nomolos_02_Cobra_Effect_scene-NN_Desktop.html` (16:9, 1920×1080) and `Nomolos_02_Cobra_Effect_scene-NN_Mobile.html` (4:5, 1080×1350).
-- `sequences/seq-NN/` holds the single sequences each scene is made of: `film.html` (16:9) and `film-4x5.html` (4:5).
+- `sequences/seq-NN/` holds the individual sequences each scene is made of: `film.html` (16:9) and `film-4x5.html` (4:5).
 
-Player keys: <kbd>Space</kbd> play/pause, <kbd>←</kbd>/<kbd>→</kbd> one frame, <kbd>Shift</kbd>+<kbd>←</kbd>/<kbd>→</kbd> one second, <kbd>Home</kbd> back to the start, <kbd>F</kbd> fullscreen. Add `?t=12.5` to a page's URL to freeze one frame.
+Player keys: <kbd>Space</kbd> play/pause, <kbd>←</kbd>/<kbd>→</kbd> one frame, <kbd>Shift</kbd>+<kbd>←</kbd>/<kbd>→</kbd> one second, <kbd>Home</kbd> back to the start, <kbd>F</kbd> fullscreen.
+
+---
 
 ## Completed Scenes
 
@@ -61,22 +82,15 @@ Player keys: <kbd>Space</kbd> play/pause, <kbd>←</kbd>/<kbd>→</kbd> one fram
 | Scene 22 | One person | 7:59.6–8:23.4 | **FINAL** |
 | Scene 23 | The emperor, next | 8:23.4–8:49.5 | **FINAL** |
 
-## Layout
-
-| Path | What it is |
-|---|---|
-| `lib/engine.min.js` | bundled and minified animation engine and procedural vector runtime |
-| `sequences/seq-NN/film.js` | the minified drawing code of one sequence, in both formats |
-| `sequences/seq-NN/timing.js` | the sequence's length and shot timing boundaries |
-| `preview/` | self-contained scene and full reel review pages |
-| `media/` | animated preview recordings of key moments |
-| `fonts/` | Noto Sans SemiBold, Noto Sans Condensed Black, and Poppins Black |
+---
 
 ## Author & Credits
 
-- **Creator, Animator & Director:** [Raisul Sohan](https://raisulsohan.com) ([@raisulsohan](https://github.com/raisulsohan))
+- **Creator, Director, Screenwriter & Lead Animator:** [Raisul Sohan](https://raisulsohan.com) ([@raisulsohan](https://github.com/raisulsohan))
+- **Art Direction & Vector Illustration:** Hand-illustrated by Raisul Sohan
+- **Motion Animation & Compositing:** Crafted in Adobe After Effects by Raisul Sohan
+- **Sound Design, SFX, BGM & Audio Scoring:** Curated, edited, and composed by Raisul Sohan from free audio archives
 - **Production:** Nomolos Documentaries (Episode 02 · The Cobra Effect)
-- **Animation & Engine:** Handcrafted by Raisul Sohan using procedural vector mathematics and HTML5 Canvas 2D drawing code.
 
 ## License
 
