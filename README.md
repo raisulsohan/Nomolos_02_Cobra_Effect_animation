@@ -1,12 +1,21 @@
 # Nomolos 02 · The Cobra Effect: the animation
 
+<p align="center">
+  <a href="https://raisulsohan.github.io/Nomolos_02_Cobra_Effect_animation/#01-Desktop"><img src="media/peek-1-reward.webp" width="49%" alt="A cash reward for dead cobras is posted on the sunlit streets of Delhi as hunters fan out"></a>
+  <a href="https://raisulsohan.github.io/Nomolos_02_Cobra_Effect_animation/#03-Desktop"><img src="media/peek-2-effect.webp" width="49%" alt="The snake population graph climbs past before and rears into a cobra hood: the cobra effect"></a>
+  <a href="https://raisulsohan.github.io/Nomolos_02_Cobra_Effect_animation/#11-Desktop"><img src="media/peek-3-rats.webp" width="49%" alt="Hanoi, 1902: The French official watches as tailless rats scurry around the streets"></a>
+  <a href="https://raisulsohan.github.io/Nomolos_02_Cobra_Effect_animation/#23-Desktop"><img src="media/peek-4-emperor.webp" width="49%" alt="A servant kneels before the first emperor of China, offering the glowing elixir of immortality"></a>
+</p>
+
 <h3 align="center"><a href="https://raisulsohan.github.io/Nomolos_02_Cobra_Effect_animation/">▶ Watch the whole film (8:49) in your browser</a></h3>
+
+<p align="center">Click a clip to open its scene.</p>
 
 <p align="center">
   <strong>An animated documentary film created, written, directed, and animated by <a href="https://raisulsohan.com">Raisul Sohan</a></strong>
 </p>
 
-The animation of *The Cobra Effect: How a Bounty on Snakes Bred More Snakes*, the second Nomolos documentary, conceived, written, and animated by **[Raisul Sohan](https://raisulsohan.com)**. Every frame is mathematically composed and drawn in JavaScript on an HTML5 canvas using his own procedural drawing code, and the film itself uses zero video or image files. Each frame is a pure function of time, so any moment can be drawn on its own.
+The animation of *The Cobra Effect: How a Bounty on Snakes Bred More Snakes*, the second Nomolos documentary, conceived, written, and animated by **[Raisul Sohan](https://raisulsohan.com)**. Every frame is mathematically composed and drawn in JavaScript on an HTML5 canvas using his own procedural drawing code, and the film itself uses zero video or image files. The clips above are recordings of the pages. Each frame is a pure function of time, so any moment can be drawn on its own.
 
 The pages play silently.
 
@@ -60,6 +69,7 @@ Player keys: <kbd>Space</kbd> play/pause, <kbd>←</kbd>/<kbd>→</kbd> one fram
 | `sequences/seq-NN/film.js` | the minified drawing code of one sequence, in both formats |
 | `sequences/seq-NN/timing.js` | the sequence's length and shot timing boundaries |
 | `preview/` | self-contained scene and full reel review pages |
+| `media/` | animated preview recordings of key moments |
 | `fonts/` | Noto Sans SemiBold, Noto Sans Condensed Black, and Poppins Black |
 
 ## Author & Credits
